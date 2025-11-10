@@ -31,6 +31,10 @@ class MainActivity : ComponentActivity() {
         //強迫橫式螢幕
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
 
+        // 隱藏狀態列：獲取 WindowInsetsController，再隱藏statusBars
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
+
         // 確保內容延伸到至邊緣
         WindowCompat.setDecorFitsSystemWindows(
             window, false)
@@ -49,14 +53,6 @@ class MainActivity : ComponentActivity() {
         val screenWidthPx = bounds.width().toFloat()
         val screenHeightPx = bounds.height().toFloat()
 
-        // 隱藏狀態列：獲取 WindowInsetsController，再隱藏statusBars
-        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
-        windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
-
-        // 實例化 ViewModel
-        val gameViewModel: GameViewModel by viewModels()
-        gameViewModel.SetGameSize(screenWidthPx,screenHeightPx)
-
         setContent {
             RaceTheme {
                 GameScreen(message = "橫式螢幕，隱藏狀態列")
@@ -64,6 +60,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
