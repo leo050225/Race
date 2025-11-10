@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
@@ -19,11 +18,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun GameScreen(message: String, viewModel: GameViewModel = viewModel()) {
-
+    // 觀察 ViewModel 狀態
     val circleX = viewModel.circleX
     val circleY = viewModel.circleY
+    val frame = viewModel.frameIndex
 
-    val imageBitmap = ImageBitmap.imageResource(R.drawable.horse0)
+    // 載入馬的動畫圖片
+    val imageBitmaps = listOf(
+        ImageBitmap.imageResource(R.drawable.horse0),
+        ImageBitmap.imageResource(R.drawable.horse1),
+        ImageBitmap.imageResource(R.drawable.horse2),
+        ImageBitmap.imageResource(R.drawable.horse3)
+    )
 
     Box(
         modifier = Modifier
@@ -37,24 +43,17 @@ fun GameScreen(message: String, viewModel: GameViewModel = viewModel()) {
                 .fillMaxSize()
                 .pointerInput(Unit) {
                     detectDragGestures { change, dragAmount ->
-                        change.consume() // 告訴系統已經處理這個事件
+                        change.consume()
                         viewModel.MoveCircle(dragAmount.x, dragAmount.y)
                     }
                 }
         ) {
-            // 繪製圓形
-            drawCircle(
-                color = Color.Red,
-                radius = 100f,
-                center = Offset(circleX, circleY)
-            )
-
+            // 繪製馬的動畫
             drawImage(
-                image = imageBitmap,
-                dstOffset = IntOffset(0, 100),
+                image = imageBitmaps[frame],
+                dstOffset = IntOffset(circleX.toInt(), circleY.toInt()),
                 dstSize = IntSize(200, 200)
             )
-
         }
     }
 }

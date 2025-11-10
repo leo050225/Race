@@ -11,29 +11,27 @@ import kotlinx.coroutines.launch
 class GameViewModel : ViewModel() {
     var screenWidthPx by mutableStateOf(0f)
         private set
-
     var screenHeightPx by mutableStateOf(0f)
         private set
 
-    var gameRunning by mutableStateOf(false)
-
-    // 加上圓圈座標狀態
     var circleX by mutableStateOf(100f)
     var circleY by mutableStateOf(100f)
+    var frameIndex by mutableStateOf(0)
+
+    var gameRunning by mutableStateOf(false)
 
     fun StartGame() {
-        // 回到初始位置
         circleX = 100f
-        circleY = screenHeightPx - 100f
-
+        circleY = screenHeightPx - 300f
         gameRunning = true
 
         viewModelScope.launch {
-            while (gameRunning) { // 每 0.1 秒循環
+            while (gameRunning) {
                 delay(100)
                 circleX += 10f
+                frameIndex = (frameIndex + 1) % 4 // 切換圖片幀
 
-                if (circleX >= screenWidthPx - 100f) {
+                if (circleX >= screenWidthPx - 200f) {
                     circleX = 100f
                 }
             }
@@ -49,7 +47,6 @@ class GameViewModel : ViewModel() {
         circleY += y
     }
 
-    // 設定螢幕寬度與高度
     fun SetGameSize(w: Float, h: Float) {
         screenWidthPx = w
         screenHeightPx = h
