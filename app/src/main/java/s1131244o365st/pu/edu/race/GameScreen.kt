@@ -22,8 +22,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-// 請確保您的 R.drawable.horse0, horse1, horse2, horse3 存在
-// 這裡用一個假的 R.drawable 來避免編譯錯誤，但您必須在專案中加入圖片
+
 import s1131244o365st.pu.edu.race.R.drawable
 
 @Composable
@@ -33,12 +32,9 @@ fun GameScreen(message: String, viewModel: GameViewModel = viewModel()) {
     val winnerText = viewModel.winnerText
     var gameRunning by remember { mutableStateOf(false) }
 
-    // 紅色可拖曳按鈕的位置
     var buttonX by remember { mutableStateOf(200f) }
     var buttonY by remember { mutableStateOf(100f) }
 
-    // 馬的動畫圖片
-    // ⚠️ 這些圖片 (R.drawable.horse0 到 horse3) 必須在您的專案中存在
     val imageBitmaps = listOf(
         ImageBitmap.imageResource(drawable.horse0),
         ImageBitmap.imageResource(drawable.horse1),
@@ -75,7 +71,7 @@ fun GameScreen(message: String, viewModel: GameViewModel = viewModel()) {
             }
 
             // 繪製終點線 (示範)
-            val finishLineX = 1000f // 需與 ViewModel 中的 finishLineX 保持一致，但這裡用像素值
+            val finishLineX = 1000f
             drawLine(
                 color = Color.Black,
                 start = Offset(finishLineX, 0f),
@@ -84,7 +80,6 @@ fun GameScreen(message: String, viewModel: GameViewModel = viewModel()) {
             )
         }
 
-        // 紅色可拖曳按鈕（控制遊戲）
         Box(
             modifier = Modifier
                 .offset { IntOffset(buttonX.toInt(), buttonY.toInt()) }
@@ -106,9 +101,7 @@ fun GameScreen(message: String, viewModel: GameViewModel = viewModel()) {
                         viewModel.StopGame()
                     }
                 },
-                // ✅ 設置為圓形
                 shape = CircleShape,
-                // ✅ 設置按鈕大小，確保是圓形
                 modifier = Modifier.size(100.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
             ) {
