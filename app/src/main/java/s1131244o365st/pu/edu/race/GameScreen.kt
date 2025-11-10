@@ -2,26 +2,26 @@ package s1131244o365st.pu.edu.race
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun GameScreen(message: String, viewModel: GameViewModel = viewModel()) {
-    // 觀察 ViewModel 狀態
-    val circleX = viewModel.circleX
-    val circleY = viewModel.circleY
-    val frame = viewModel.frameIndex
+
+    val horses = viewModel.horses
+    val winnerText = viewModel.winnerText
 
     // 載入馬的動畫圖片
     val imageBitmaps = listOf(
@@ -34,25 +34,38 @@ fun GameScreen(message: String, viewModel: GameViewModel = viewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Yellow)
+            .background(Color(0xFFFFF176))
     ) {
-        Text(text = message)
+        // 標題
+        Text(
+            text = message,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            modifier = Modifier.align(Alignment.TopCenter).padding(top = 10.dp)
+        )
 
+        // 繪製三匹馬
         Canvas(
-            modifier = Modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectDragGestures { change, dragAmount ->
-                        change.consume()
-                        viewModel.MoveCircle(dragAmount.x, dragAmount.y)
-                    }
-                }
+            modifier = Modifier.fillMaxSize()
         ) {
-            // 繪製馬的動畫
-            drawImage(
-                image = imageBitmaps[frame],
-                dstOffset = IntOffset(circleX.toInt(), circleY.toInt()),
-                dstSize = IntSize(200, 200)
+            horses.forEach { horse ->
+                drawImage(
+                    image = imageBitmaps[horse.frame],
+                    dstOffset = IntOffset(horse.x.toInt(), horse.y.toInt()),
+                    dstSize = IntSize(200, 200)
+                )
+            }
+        }
+
+        // 顯示勝利文字
+        if (winnerText.isNotEmpty()) {
+            Text(
+                text = winnerText,
+                color = Color.Red,
+                fontSize = 36.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
     }
