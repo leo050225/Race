@@ -71,7 +71,7 @@ fun GameScreen(message: String, viewModel: GameViewModel = viewModel()) {
             }
 
             // 繪製終點線 (示範)
-            val finishLineX = 1000f
+            val finishLineX = 0f
             drawLine(
                 color = Color.Black,
                 start = Offset(finishLineX, 0f),
